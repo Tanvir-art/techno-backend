@@ -28,6 +28,19 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+        // Connect to the "insertDB" database and access its "haiku" collection
+        const productCollection = client.db("productDb").collection("coffee");
+
+        
+        app.post('/add-product', async(req, res)=>{
+            const newCoffee = req.body;
+            const result = await productCollection.insertOne(newCoffee);
+            res.send(result);
+    })
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -39,9 +52,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res)=>{
-    res.send('coffe making server');
+    res.send('product making server');
 })
 
 app.listen(port, ()=>{
-    console.log(`Coffee server running at ${port}`);
+    console.log(`Product server running at ${port}`);
 })
