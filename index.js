@@ -31,12 +31,24 @@ async function run() {
 
         // Connect to the "insertDB" database and access its "haiku" collection
         const productCollection = client.db("productDb").collection("coffee");
+        const userCollection = client.db("productDb").collection("user");
 
         
         app.post('/add-product', async(req, res)=>{
             const newCoffee = req.body;
             const result = await productCollection.insertOne(newCoffee);
             res.send(result);
+    })
+
+
+
+    //user api 
+
+    app.post('/user', async(req, res)=>{
+      const user = req.body;
+      console.log(user)
+      const result = await userCollection.insertOne(user);
+      res.send(result);
     })
 
 
