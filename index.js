@@ -32,6 +32,7 @@ async function run() {
         // Connect to the "insertDB" database and access its "haiku" collection
         const productCollection = client.db("productDb").collection("coffee");
         const userCollection = client.db("productDb").collection("user");
+        const cartCollection = client.db("productDb").collection("cart");
 
         
         app.post('/add-product', async(req, res)=>{
@@ -79,6 +80,28 @@ async function run() {
 
       const result = await productCollection.updateOne(filter, product, options);
       res.send(result)
+    })
+
+    //cart api
+
+    app.post('/cart', async(req, res)=>{
+      const cart = req.body;
+      console.log(cart)
+      const result = await cartCollection.insertOne(cart);
+      res.send(result);
+    })
+
+    app.get('/cart-product', async(req, res)=>{
+      const cursor = cartCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+    app.delete('/cart-product/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: id}
+      const result = await cartCollection.deleteOne(query);
+      res.send(result);
     })
 
 
